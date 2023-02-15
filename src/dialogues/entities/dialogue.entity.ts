@@ -1,6 +1,6 @@
 import { UserDialogue } from './../../users-dialogues/entities/user-dialogue';
 import { User } from './../../users/entities/user.entity';
-import { DialoguePart } from './../../dialogue-parts/entities/dialogue-part.entity';
+// import { DialoguePart } from './../../dialogue-parts/entities/dialogue-part.entity';
 import { ApiProperty } from '@nestjs/swagger';
 import {
   Table,
@@ -11,7 +11,6 @@ import {
   BelongsToMany,
   ForeignKey,
 } from 'sequelize-typescript';
-import { v4 as uuidv4 } from 'uuid';
 
 @Table({ tableName: 'dialogue' })
 export class Dialogue extends Model<Dialogue> {
@@ -23,7 +22,6 @@ export class Dialogue extends Model<Dialogue> {
     type: DataType.STRING,
     unique: true,
     primaryKey: true,
-    defaultValue: uuidv4(),
   })
   id: string;
 
@@ -47,7 +45,7 @@ export class Dialogue extends Model<Dialogue> {
   description: string;
 
   @ForeignKey(() => User)
-  usersIds: User[];
+  userIds: User[];
 
   @ApiProperty({
     example: '[]',
@@ -56,12 +54,12 @@ export class Dialogue extends Model<Dialogue> {
   @BelongsToMany(() => User, { through: () => UserDialogue })
   users: User[];
 
-  @ApiProperty({
-    example: '[]',
-    description: 'Текст по кускам',
-  })
-  partsIds: DialoguePart[];
+  // @ApiProperty({
+  //   example: '[]',
+  //   description: 'Текст по кускам',
+  // })
+  // partsIds: DialoguePart[];
 
-  @HasMany(() => DialoguePart)
-  parts: DialoguePart[];
+  // @HasMany(() => DialoguePart)
+  // parts: DialoguePart[];
 }

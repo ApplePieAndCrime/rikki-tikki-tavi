@@ -7,10 +7,13 @@ import {
   Param,
   Delete,
 } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import { Query } from '@nestjs/common/decorators';
+import { ApiQuery, ApiTags } from '@nestjs/swagger';
+import { FindOptions } from 'sequelize';
 import { DialoguesService } from './dialogues.service';
 import { CreateDialogueDto } from './dto/create-dialogue.dto';
 import { UpdateDialogueDto } from './dto/update-dialogue.dto';
+import { Dialogue } from './entities/dialogue.entity';
 
 @ApiTags('диалоги')
 @Controller('dialogues')
@@ -22,9 +25,10 @@ export class DialoguesController {
     return this.dialoguesService.create(createDialogueDto);
   }
 
+  @ApiQuery({ name: 'filter' })
   @Get()
-  findAll() {
-    return this.dialoguesService.findAll();
+  findAll(@Query('filter') filter: FindOptions<Dialogue> | undefined) {
+    return this.dialoguesService.findAll(filter);
   }
 
   @Get(':id')
@@ -37,7 +41,7 @@ export class DialoguesController {
     @Param('id') id: string,
     @Body() updateDialogueDto: UpdateDialogueDto,
   ) {
-    return this.dialoguesService.update(+id, updateDialogueDto);
+    return this.dialoguesService.update(id, updateDialogueDto);
   }
 
   @Delete(':id')

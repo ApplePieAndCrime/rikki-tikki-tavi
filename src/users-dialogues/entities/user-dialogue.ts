@@ -9,7 +9,6 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { v4 as uuidv4 } from 'uuid';
 
 @Table({ tableName: 'users-dialogues' })
 export class UserDialogue extends Model<UserDialogue> {
@@ -21,7 +20,6 @@ export class UserDialogue extends Model<UserDialogue> {
     type: DataType.STRING,
     unique: true,
     primaryKey: true,
-    defaultValue: uuidv4(),
   })
   id: string;
 

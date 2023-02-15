@@ -1,4 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { DateDataType } from 'sequelize';
 import {
   BelongsToMany,
   Column,
@@ -7,7 +8,6 @@ import {
   Model,
   Table,
 } from 'sequelize-typescript';
-import { v4 as uuidv4 } from 'uuid';
 
 @Table({ tableName: 'users' })
 export class User extends Model<User> {
@@ -19,19 +19,18 @@ export class User extends Model<User> {
     type: DataType.STRING,
     unique: true,
     primaryKey: true,
-    defaultValue: uuidv4(),
   })
   id: string;
 
   @ApiProperty({
-    example: 'nickname',
-    description: 'Ник пользвателя',
+    example: 'username',
+    description: 'Имя пользвателя',
   })
   @Column({
     type: DataType.STRING,
     unique: true,
   })
-  nickname: string;
+  username: string;
 
   @ApiProperty({
     example: 'admin@mail.ru',
@@ -52,13 +51,18 @@ export class User extends Model<User> {
   })
   password: string;
 
-  // @ApiProperty({
-  //   example: '[]',
-  //   description: 'Юзеры',
-  // })
-  // @BelongsToMany(() => Dialogue, () => User)
-  // dialogues: Dialogue[];
+  @Column({
+    type: DataType.DATE,
+    defaultValue: new Date(),
+  })
+  createdAt: DateDataType;
 
-  // @HasMany(() => DialoguePart)
-  // dialogueParts: DialoguePart[];
+  @Column({
+    type: DataType.DATE,
+    defaultValue: new Date(),
+  })
+  updatedAt: DateDataType;
+
+  @Column({ type: DataType.BOOLEAN, defaultValue: false })
+  isAdmin?: boolean;
 }

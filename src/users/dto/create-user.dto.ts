@@ -5,10 +5,10 @@ import { IsEmail } from 'class-validator';
 @Injectable()
 export class CreateUserDto {
   @ApiProperty({
-    example: 'nickname',
-    description: 'Ник пользвателя',
+    example: 'username',
+    description: 'Имя пользвателя',
   })
-  nickname: string;
+  username: string;
 
   @IsEmail({}, { message: 'Некорректный email' })
   @ApiProperty({
@@ -21,5 +21,11 @@ export class CreateUserDto {
     example: 'admin',
     description: 'Email',
   })
-  password: string;
+  password?: string;
+
+  @ApiProperty({
+    example: 'example',
+    description: 'Refresh token',
+  })
+  refreshToken?: string;
 }

@@ -1,23 +1,58 @@
+import { User } from 'src/users/entities/user.entity';
 import { Injectable } from '@nestjs/common';
+import { InjectModel } from '@nestjs/sequelize';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
+import { Op } from 'sequelize';
+import { parseResult } from 'utils/helpers';
+import { uuid } from 'uuidv4';
+
 @Injectable()
 export class UsersService {
-  create(createUserDto: CreateUserDto) {
-    return 'This action adds a new user';
+  constructor(@InjectModel(User) private usersRepository: typeof User) {}
+
+  async create(createUserDto: CreateUserDto) {
+    const id = uuid();
+    const created = await this.usersRepository.create({ ...createUserDto, id });
+    return this.findByUsername(created.username);
   }
 
   findAll() {
-    return `This action returns all users`;
+    // return `This action returns all users`;
+    return parseResult(this.usersRepository.findAll());
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
+  async findOne(username: string): Promise<User | undefined> {
+    const user = await this.usersRepository.findOne({
+      where: { username },
+      raw: true,
+    });
+    console.log('user findOne', { username, user });
+    return user;
   }
 
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+  async findByEmailOrUsername(login: string): Promise<User | undefined> {
+    const user = await this.usersRepository.findOne({
+      where: { [Op.or]: [{ username: login }, { email: login }] },
+      raw: true,
+    });
+
+    console.log('user findOne', { login, user });
+    return user;
+  }
+
+  async findByUsername(login: string): Promise<User | undefined> {
+    const user = await this.usersRepository.findOne({
+      where: { username: login },
+      raw: true,
+    });
+
+    return user;
+  }
+
+  update(id: string, updateUserDto: UpdateUserDto) {
+    return this.usersRepository.update(updateUserDto, { where: { id } });
   }
 
   remove(id: number) {
