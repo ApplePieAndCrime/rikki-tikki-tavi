@@ -17,10 +17,16 @@ import { TranslatorModule } from './translator/translator.module';
 import { AuthModule } from './auth/auth.module';
 import { TextModule } from './text/texts.module';
 import { Text } from './text/entities/text.entity';
+import { HelpersService } from './helpers/helpers.service';
+import { HelpersController } from './helpers/helpers.controller';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({ envFilePath: `.env` }),
+    ConfigModule.forRoot({
+      envFilePath: `.env`,
+      isGlobal: true,
+      expandVariables: true,
+    }),
     SequelizeModule.forRoot({
       dialect: 'postgres',
       host: process.env.POSTGRES_HOST,
@@ -39,6 +45,7 @@ import { Text } from './text/entities/text.entity';
     TranslatorModule,
     TextModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, HelpersController],
+  providers: [HelpersService],
 })
 export class AppModule {}

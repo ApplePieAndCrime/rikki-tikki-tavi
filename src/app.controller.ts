@@ -5,7 +5,7 @@ import { Body, Post, Request, UseGuards } from '@nestjs/common/decorators';
 
 import { AuthService } from './auth/auth.service';
 
-import { JwtAuthGuard } from './auth/jwt/jwt-auth.guard';
+// import { JwtAuthGuard } from './auth/jwt/jwt-auth.guard';
 import { GoogleAuthGuard } from './auth/google/google-auth.guard';
 
 @Controller()

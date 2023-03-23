@@ -4,7 +4,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 
-import { Op } from 'sequelize';
+import { Op, UpdateOptions } from 'sequelize';
 import { parseResult } from 'utils/helpers';
 import { uuid } from 'uuidv4';
 
@@ -51,8 +51,30 @@ export class UsersService {
     return user;
   }
 
-  update(id: string, updateUserDto: UpdateUserDto) {
+  async findByEmail(email: string): Promise<User | undefined> {
+    const user = await this.usersRepository.findOne({
+      where: { email },
+      raw: true,
+    });
+
+    return user;
+  }
+
+  async findById(id: string): Promise<User | undefined> {
+    const user = await this.usersRepository.findOne({
+      where: { id },
+      raw: true,
+    });
+
+    return user;
+  }
+
+  updateById(id: string, updateUserDto: UpdateUserDto) {
     return this.usersRepository.update(updateUserDto, { where: { id } });
+  }
+
+  update(updateUserDto: UpdateUserDto, options: UpdateOptions) {
+    return this.usersRepository.update(updateUserDto, options);
   }
 
   remove(id: number) {

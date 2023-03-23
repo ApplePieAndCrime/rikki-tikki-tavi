@@ -4,8 +4,8 @@ import { config } from 'dotenv';
 config();
 
 export const jwtConstants = {
-  secret: `${process.env.SECRET_KEY}`,
-  secretRefresh: `${process.env.SECRET_KEY_REFRESH}`,
+  secret: `${process.env.JWT_SECRET}`,
+  expiresIn: `${process.env.JWT_EXPIRES_IN}`,
 };
 
 export const IS_PUBLIC_KEY = 'isPublic';
